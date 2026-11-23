@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Cherish">
+<meta name="theme-color" content="#FBF6EE">
+<title>Cherish – Homeboy Supporter App (Prototype)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF6EE; --paper:#FFFFFF; --ink:#1F1B17; --muted:#6E655C; --line:#ECE3D6;
+    --terra:#C4532F; --terra-soft:#F6E2D9; --sage:#4F7A63; --sage-soft:#E2EDE6;
+    --gold:#D99A2B; --gold-soft:#F8EBD2; --radius:18px;
+    --safe-top:env(safe-area-inset-top,0px); --safe-bot:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;background:#E9E1D5;font-family:"DM Sans",system-ui,sans-serif;color:var(--ink)}
+  button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+  input,select,textarea{font:inherit}
+  .stage{min-height:100%;display:flex;align-items:center;justify-content:center;padding:24px}
+  .phone{width:390px;height:844px;max-height:calc(100vh - 48px);background:var(--cream);border-radius:44px;
+    box-shadow:0 30px 80px rgba(60,40,20,.25),0 0 0 10px #1F1B17;position:relative;overflow:hidden;display:flex;flex-direction:column}
+  @media (max-width:500px){
+    .stage{padding:0}
+    .phone{width:100%;height:100vh;height:100dvh;max-height:none;border-radius:0;box-shadow:none}
+  }
+  .proto-banner{background:var(--ink);color:#F5EEE4;font-size:11px;text-align:center;padding:calc(6px + var(--safe-top)) 12px 6px;letter-spacing:.02em}
+  header.top{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 8px}
+  .brand{font-family:"DM Serif Display",serif;font-size:24px;letter-spacing:.01em}
+  .brand span{color:var(--terra)}
+  .icon-btn{width:40px;height:40px;border-radius:50%;background:var(--paper);display:grid;place-items:center;border:1px solid var(--line);position:relative}
+  .badge{position:absolute;top:-4px;right:-4px;background:var(--terra);color:#fff;font-size:11px;min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center;padding:0 4px;font-weight:700}
+  main{flex:1;overflow-y:auto;padding:4px 20px 24px;-webkit-overflow-scrolling:touch}
+  h1{font-family:"DM Serif Display",serif;font-weight:400;font-size:30px;line-height:1.1;margin:8px 0 6px}
+  h2{font-family:"DM Serif Display",serif;font-weight:400;font-size:21px;margin:26px 0 12px}
+  p{line-height:1.5}
+  .muted{color:var(--muted)}
+  .small{font-size:13px}
+  .card{background:var(--paper);border-radius:var(--radius);border:1px solid var(--line);padding:16px}
+  .hero{background:linear-gradient(140deg,var(--terra) 0%,#A63E20 100%);color:#fff;border:0;padding:20px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.1)}
+  .hero .stat{font-family:"DM Serif Display",serif;font-size:40px;line-height:1}
+  .sample-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border-radius:6px;background:var(--gold-soft);color:#8A5A0B}
+  .hero .sample-tag{background:rgba(255,255,255,.2);color:#fff}
+  .quick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+  .quick button{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-weight:500}
+  .quick .qi{width:56px;height:56px;border-radius:16px;display:grid;place-items:center}
+  .row{display:flex;gap:12px;align-items:center}
+  .between{justify-content:space-between}
+  .link{color:var(--terra);font-weight:700;font-size:14px}
+  .story-thumb{border-radius:14px;height:150px;display:flex;align-items:flex-end;padding:14px;color:#fff;position:relative;overflow:hidden}
+  .story-thumb svg{position:absolute;inset:0;width:100%;height:100%}
+  .story-thumb .t{position:relative;font-family:"DM Serif Display",serif;font-size:20px;line-height:1.15;text-shadow:0 1px 8px rgba(0,0,0,.25)}
+  .list{display:flex;flex-direction:column;gap:12px}
+  .event{display:flex;gap:14px;align-items:center}
+  .date{width:56px;min-width:56px;height:62px;border-radius:14px;background:var(--sage-soft);color:var(--sage);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700}
+  .date .m{font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+  .date .d{font-size:22px;line-height:1}
+  .pill{border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;border:1.5px solid var(--line);background:var(--paper)}
+  .pill.on{background:var(--sage);border-color:var(--sage);color:#fff}
+  .btn{display:block;width:100%;padding:16px;border-radius:14px;background:var(--terra);color:#fff;font-weight:700;font-size:16px;text-align:center}
+  .btn.secondary{background:var(--paper);color:var(--ink);border:1.5px solid var(--line)}
+  .btn:disabled{opacity:.5}
+  .seg{display:grid;grid-template-columns:1fr 1fr;background:#EFE6D9;border-radius:12px;padding:4px}
+  .icon-btn{padding:0}
+  .seg button{padding:10px;border-radius:9px;font-weight:700;font-size:14px;color:var(--muted)}
+  .seg button.on{background:var(--paper);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+  .amounts button{padding:16px 0;border-radius:14px;background:var(--paper);border:1.5px solid var(--line);font-weight:700;font-size:18px}
+  .amounts button.on{border-color:var(--terra);background:var(--terra-soft);color:var(--terra)}
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+  .field label{font-size:13px;font-weight:700}
+  .field input,.field select,.field textarea{padding:13px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--paper);font-size:16px;color:var(--ink)}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--terra)}
+  .impact{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:14px;background:var(--gold-soft);margin-top:4px}
+  .product{display:flex;gap:14px;align-items:center}
+  .pimg{width:72px;min-width:72px;height:72px;border-radius:14px;display:grid;place-items:center;font-size:30px}
+  .stepper{display:flex;align-items:center;gap:10px}
+  .stepper button{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--line);background:var(--paper);font-weight:700;font-size:18px;line-height:1}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin:0 -20px;padding-left:20px;padding-right:20px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chips .pill{white-space:nowrap}
+  nav.tabs{display:grid;grid-template-columns:repeat(5,1fr);background:var(--paper);border-top:1px solid var(--line);padding:8px 6px calc(8px + var(--safe-bot))}
+  nav.tabs button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--muted);padding:4px 0}
+  nav.tabs button.on{color:var(--terra)}
+  nav.tabs svg{width:24px;height:24px}
+  .sheet-wrap{position:absolute;inset:0;background:rgba(31,27,23,.45);display:none;align-items:flex-end;z-index:20}
+  .sheet-wrap.open{display:flex}
+  .sheet{background:var(--cream);width:100%;border-radius:24px 24px 0 0;padding:10px 20px calc(24px + var(--safe-bot));max-height:88%;overflow-y:auto;animation:up .25s ease}
+  @keyframes up{from{transform:translateY(40px);opacity:.5}to{transform:none;opacity:1}}
+  .grab{width:40px;height:5px;border-radius:3px;background:#D7CCBD;margin:0 auto 14px}
+  .back{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--terra);margin:6px 0 4px}
+  .toast{position:absolute;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;opacity:0;transition:.25s;pointer-events:none;z-index:30;white-space:nowrap}
+  .toast.show{opacity:1;transform:translateX(-50%)}
+  .check{width:72px;height:72px;border-radius:50%;background:var(--sage);display:grid;place-items:center;margin:10px auto 8px}
+  .note{font-size:12px;color:var(--muted);background:#F3ECE1;border-radius:12px;padding:10px 12px;line-height:1.45}
+  .divider{height:1px;background:var(--line);margin:14px 0}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="phone" id="app">
+    <div class="proto-banner">Prototype · sample content · no real payments</div>
+    <header class="top">
+      <div class="brand">Homeboy <span>Cherish</span></div>
+      <button class="icon-btn" aria-label="Cart" onclick="openCart()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6 5 3H2"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg>
+        <span class="badge" id="cartBadge" style="display:none">0</span>
+      </button>
+    </header>
+    <main id="view"></main>
+    <nav class="tabs" id="tabs"></nav>
+    <div class="sheet-wrap" id="sheetWrap" onclick="if(event.target===this)closeSheet()"><div class="sheet" id="sheet"></div></div>
+    <div class="toast" id="toast"></div>
+  </div>
+</div>
+
+<script>
+/* ---------- Sample data (replace with real, approved content) ---------- */
+const STORIES = [
+  {id:"s1", title:"A fresh start in the bakery", tag:"Bakery", mins:3, hue:["#C4532F","#E39B5A"],
+   body:["This is placeholder text for a participant story. Real stories should only be published with the person's written consent and in the words they choose.",
+         "Use this space to describe the journey: arriving at Homeboy, the first job assignment, the people who showed up along the way, and what has changed since.",
+         "Keep the focus on dignity and kinship, not on past mistakes."]},
+  {id:"s2", title:"Kinship in the classroom", tag:"Education", mins:4, hue:["#4F7A63","#8DB39A"],
+   body:["Placeholder story about education services. Replace with an approved story from the communications team.",
+         "Describe how classes, tutoring or certification programs create new possibilities."]},
+  {id:"s3", title:"Tattoo removal, one session at a time", tag:"Services", mins:2, hue:["#D99A2B","#EFC77A"],
+   body:["Placeholder story about tattoo removal services. Replace with approved content.",
+         "Explain why this service matters for getting hired and moving forward."]},
+  {id:"s4", title:"Why I give every month", tag:"Supporters", mins:2, hue:["#6B4E8A","#A58BC2"],
+   body:["Placeholder supporter spotlight. Use a real supporter's quote only with their permission.",
+         "Show how steady monthly gifts help plan programs year-round."]}
+];
+const EVENTS = [
+  {id:"e1", m:"Dec", d:"6",  title:"Holiday Open House", where:"Homeboy HQ, Los Angeles", time:"10 AM – 2 PM", kind:"Community"},
+  {id:"e2", m:"Dec", d:"13", title:"Volunteer Day: Holiday Gift Packing", where:"Homeboy HQ", time:"9 AM – 12 PM", kind:"Volunteer"},
+  {id:"e3", m:"Jan", d:"10", title:"Campus Tour for Supporters", where:"Homeboy HQ", time:"11 AM – 12 PM", kind:"Tour"},
+  {id:"e4", m:"Feb", d:"7",  title:"Supporter Breakfast", where:"Homegirl Café", time:"8 – 9:30 AM", kind:"Community"}
+];
+const PRODUCTS = [
+  {id:"p1", name:"Bakery Gift Box", shop:"Homeboy Bakery", price:28, emoji:"🥐", bg:"#F6E2D9"},
+  {id:"p2", name:"Café Gift Card", shop:"Homegirl Café", price:25, emoji:"☕", bg:"#E2EDE6"},
+  {id:"p3", name:"Coffee Beans, 12 oz", shop:"Homeboy Coffee", price:16, emoji:"🫘", bg:"#F8EBD2"},
+  {id:"p4", name:"Classic Logo Tee", shop:"Homeboy Merch", price:30, emoji:"👕", bg:"#E6E1EE"},
+  {id:"p5", name:"Salsa Trio", shop:"Homeboy Foods", price:18, emoji:"🌶️", bg:"#F6E2D9"}
+];
+const IMPACT = { 25:"could help cover a day of job training (sample — replace with approved impact figures)",
+  50:"could help with a tattoo removal session (sample)", 100:"could support a week of case management (sample)",
+  250:"could help fund a month of classes (sample)", 500:"could support a month of paid job training (sample)" };
+
+/* ---------- State (kept in memory; localStorage used only as a convenience) ---------- */
+const store = {
+  get(k,f){try{const v=localStorage.getItem("cherish_"+k);return v?JSON.parse(v):f}catch(e){return f}},
+  set(k,v){try{localStorage.setItem("cherish_"+k,JSON.stringify(v))}catch(e){}}
+};
+const state = {
+  tab:"home", story:null,
+  freq:"monthly", amount:50, custom:"", fund:"Where most needed",
+  rsvps:store.get("rsvps",[]), cart:store.get("cart",{}), eventFilter:"All"
+};
+
+/* ---------- Icons ---------- */
+const I = {
+  home:'<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/>',
+  give:'<path d="M12 21s-7-4.5-9-9.5C1.7 8 4 4.5 7.5 4.5c2 0 3.4 1.1 4.5 2.6 1.1-1.5 2.5-2.6 4.5-2.6C20 4.5 22.3 8 21 11.5 19 16.5 12 21 12 21z"/>',
+  stories:'<path d="M4 4h12a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4z"/><path d="M8 9h8M8 13h6"/>',
+  events:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  shop:'<path d="M4 8h16l-1 12H5z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
+  back:'<path d="M15 18 9 12l6-6"/>',
+  play:'<circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z"/>'
+};
+const svg = (p,s=24,w=2)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const TABS = [["home","Home"],["give","Give"],["stories","Stories"],["events","Events"],["shop","Shop"]];
+
+/* ---------- Helpers ---------- */
+const $ = id=>document.getElementById(id);
+const money = n=>"$"+Number(n).toLocaleString();
+function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2000)}
+function thumb(s,h=150){
+  return `<div class="story-thumb" style="height:${h}px">
+    <svg viewBox="0 0 300 150" preserveAspectRatio="none"><defs><linearGradient id="g${s.id}${h}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${s.hue[0]}"/><stop offset="1" stop-color="${s.hue[1]}"/></linearGradient></defs>
+    <rect width="300" height="150" fill="url(#g${s.id}${h})"/><circle cx="250" cy="30" r="60" fill="rgba(255,255,255,.12)"/><circle cx="40" cy="140" r="45" fill="rgba(0,0,0,.08)"/></svg>
+    <div class="t">${s.title}</div></div>`;
+}
+const cartCount = ()=>Object.values(state.cart).reduce((a,b)=>a+b,0);
+const cartTotal = ()=>Object.entries(state.cart).reduce((a,[id,q])=>a+PRODUCTS.find(p=>p.id===id).price*q,0);
+function saveCart(){store.set("cart",state.cart);const n=cartCount(),b=$("cartBadge");b.textContent=n;b.style.display=n?"grid":"none"}
+
+/* ---------- Navigation (hash routes: #home #give #stories #events #shop) ---------- */
+function go(tab){state.tab=tab;state.story=null;if(location.hash!=="#"+tab)history.replaceState(null,"","#"+tab);render();$("view").scrollTop=0}
+window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(SCREENS[h]&&h!==state.tab)go(h)});
+
+function renderTabs(){
+  $("tabs").innerHTML = TABS.map(([k,l])=>`<button class="${state.tab===k?"on":""}" onclick="go('${k}')" aria-label="${l}">${svg(I[k])}<span>${l}</span></button>`).join("");
+}
+
+/* ---------- Screens ---------- */
+function Home(){
+  const next = EVENTS[0], s = STORIES[0];
+  return `
+  <h1>Welcome back, friend.</h1>
+  <p class="muted" style="margin:0 0 16px">Thank you for standing with the Homeboy community.</p>
+  <div class="card hero">
+    <span class="sample-tag">Sample data</span>
+    <div class="small" style="margin-top:10px;opacity:.9">Your giving this year</div>
+    <div class="stat">$600</div>
+    <div class="small" style="opacity:.9;margin-top:6px">12 monthly gifts · thank you for showing up</div>
+  </div>
+  <div class="quick">
+    <button onclick="go('give')"><span class="qi" style="background:var(--terra-soft);color:var(--terra)">${svg(I.give)}</span>Give</button>
+    <button onclick="go('thought')"><span class="qi" style="background:var(--sage-soft);color:var(--sage)">${svg(I.play)}</span>Daily Thought</button>
+    <button onclick="go('shop')"><span class="qi" style="background:var(--gold-soft);color:#A8700F">${svg(I.shop)}</span>Shop</button>
+    <button onclick="go('stories')"><span class="qi" style="background:#E6E1EE;color:#6B4E8A">${svg(I.stories)}</span>Stories</button>
+  </div>
+  <div class="row between"><h2>Featured story</h2><button class="link" onclick="go('stories')">See all</button></div>
+  <button style="display:block;width:100%;text-align:left" onclick="openStory('${s.id}')">${thumb(s,170)}
+    <div class="small muted" style="margin-top:8px">${s.tag} · ${s.mins} min read</div></button>
+  <div class="row between"><h2>Coming up</h2><button class="link" onclick="go('events')">All events</button></div>
+  ${eventRow(next)}
+  <h2>Add to your home screen</h2>
+  <div class="note">On iPhone, open this page in Safari, tap the Share button, then <b>Add to Home Screen</b>. It will open full-screen like an app.</div>`;
+}
+
+function Give(){
+  const amt = state.custom ? Number(state.custom) : state.amount;
+  const imp = IMPACT[amt];
+  return `
+  <h1>Give with heart</h1>
+  <p class="muted" style="margin:0 0 16px">Every gift helps someone take the next step toward a new life.</p>
+  <div class="seg">
+    <button class="${state.freq==="monthly"?"on":""}" onclick="setFreq('monthly')">Monthly</button>
+    <button class="${state.freq==="once"?"on":""}" onclick="setFreq('once')">One time</button>
+  </div>
+  <div class="amounts">
+    ${[25,50,100,250,500].map(a=>`<button class="${!state.custom&&state.amount===a?"on":""}" onclick="setAmt(${a})">${money(a)}</button>`).join("")}
+    <button class="${state.custom?"on":""}" onclick="document.getElementById('customAmt').focus()" style="font-size:14px">Other</button>
+  </div>
+  <div class="field"><label for="customAmt">Custom amount</label>
+    <input id="customAmt" inputmode="numeric" placeholder="$" value="${state.custom}" oninput="setCustom(this.value)"></div>
+  <div class="field"><label for="fund">Direct my gift to</label>
+    <select id="fund" onchange="state.fund=this.value">
+      ${["Where most needed","Job training","Education","Tattoo removal","Mental health services"].map(f=>`<option ${state.fund===f?"selected":""}>${f}</option>`).join("")}
+    </select></div>
+  <div id="impactBox">${imp?`<div class="impact"><span style="font-size:22px">✨</span><div class="small"><b>${money(amt)}${state.freq==="monthly"?"/month":""}</b> ${imp}</div></div>`:""}</div>
+  <div style="height:16px"></div>
+  <button class="btn" id="giveBtn" ${amt>0?"":"disabled"} onclick="openCheckout()">Give ${amt>0?money(amt):""}${state.freq==="monthly"?" monthly":""}</button>
+  <p class="small muted" style="text-align:center">Prototype only: no payment is taken.</p>`;
+}
+
+function Stories(){
+  if(state.story){
+    const s = STORIES.find(x=>x.id===state.story);
+    return `<button class="back" onclick="state.story=null;render()">${svg(I.back,18,2.5)} Stories</button>
+      ${thumb(s,200)}
+      <div class="row" style="margin:12px 0 4px;gap:8px"><span class="sample-tag">Sample story</span><span class="small muted">${s.tag} · ${s.mins} min read</span></div>
+      ${s.body.map(p=>`<p>${p}</p>`).join("")}
+      <div class="divider"></div>
+      <button class="btn" onclick="go('give')">Support stories like this</button>`;
+  }
+  return `<h1>Stories</h1>
+    <p class="muted" style="margin:0 0 16px">Hope, kinship and second chances, shared with consent.</p>
+    <div class="list">${STORIES.map(s=>`<button style="text-align:left" onclick="openStory('${s.id}')">${thumb(s,130)}
+      <div class="small muted" style="margin-top:6px">${s.tag} · ${s.mins} min read</div></button>`).join("")}</div>`;
+}
+
+function eventRow(e){
+  const going = state.rsvps.includes(e.id);
+  return `<div class="card event"><div class="date"><span class="m">${e.m}</span><span class="d">${e.d}</span></div>
+    <div style="flex:1;min-width:0"><div style="font-weight:700">${e.title}</div>
+    <div class="small muted">${e.time} · ${e.where}</div></div>
+    <button class="pill ${going?"on":""}" onclick="toggleRsvp('${e.id}')">${going?"Going ✓":"RSVP"}</button></div>`;
+}
+function Events(){
+  const kinds = ["All","Community","Volunteer","Tour"];
+  const list = EVENTS.filter(e=>state.eventFilter==="All"||e.kind===state.eventFilter);
+  return `<h1>Events & volunteering</h1>
+    <p class="muted" style="margin:0 0 14px">Come see Homeboy in person, or lend a hand.</p>
+    <div class="chips">${kinds.map(k=>`<button class="pill ${state.eventFilter===k?"on":""}" onclick="state.eventFilter='${k}';render()">${k}</button>`).join("")}</div>
+    <div class="list" style="margin-top:14px">${list.map(eventRow).join("")}</div>
+    <h2>Volunteer with us</h2>
+    <div class="card">
+      <p style="margin-top:0">Tell us how you'd like to help and our team will follow up.</p>
+      <button class="btn secondary" onclick="openVolunteer()">I'm interested</button>
+    </div>
+    <p class="small muted">Event dates are sample placeholders.</p>`;
+}
+
+function Shop(){
+  return `<h1>Shop with purpose</h1>
+    <p class="muted" style="margin:0 0 16px">Purchases from Homeboy's social enterprises support jobs and training.</p>
+    <div class="list">${PRODUCTS.map(p=>{
+      const q = state.cart[p.id]||0;
+      return `<div class="card product"><div class="pimg" style="background:${p.bg}">${p.emoji}</div>
+        <div style="flex:1;min-width:0"><div style="font-weight:700">${p.name}</div><div class="small muted">${p.shop}</div>
+        <div style="font-weight:700;margin-top:4px">${money(p.price)}</div></div>
+        ${q?`<div class="stepper"><button onclick="addCart('${p.id}',-1)" aria-label="Remove one">−</button><b>${q}</b><button onclick="addCart('${p.id}',1)" aria-label="Add one">+</button></div>`
+           :`<button class="pill" onclick="addCart('${p.id}',1)">Add</button>`}</div>`;}).join("")}</div>
+    ${cartCount()?`<div style="height:16px"></div><button class="btn" onclick="openCart()">View cart · ${money(cartTotal())}</button>`:""}
+    <p class="small muted">Products and prices are sample placeholders.</p>`;
+}
+
+const TOTD_PLAYLIST = "https://www.youtube.com/watch?v=5OuAIed3M6U&list=PLhJsI4TowOGT861CXWCHywMQ0Vh3QMA7q";
+function Thought(){
+  return `<button class="back" onclick="go('home')">${svg(I.back,18,2.5)} Home</button>
+    <h1>Thought of the Day</h1>
+    <p class="muted" style="margin:0 0 16px">A few minutes of reflection to carry with you today.</p>
+    <a href="${TOTD_PLAYLIST}" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:#fff">
+      <div style="border-radius:var(--radius);aspect-ratio:16/9;background:linear-gradient(140deg,var(--sage) 0%,#2F5241 100%);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:18px">
+        <div style="position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.1)"></div>
+        <div style="position:absolute;inset:0;display:grid;place-items:center">
+          <div style="width:68px;height:68px;border-radius:50%;background:rgba(255,255,255,.95);display:grid;place-items:center;color:var(--sage);box-shadow:0 6px 20px rgba(0,0,0,.2)">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
+        <div style="position:relative;font-family:'DM Serif Display',serif;font-size:22px">Today's thought</div>
+        <div class="small" style="position:relative;opacity:.9">Watch on YouTube</div>
+      </div></a>
+    <div style="height:14px"></div>
+    <a class="btn" href="${TOTD_PLAYLIST}" target="_blank" rel="noopener" style="text-decoration:none">Open the full playlist</a>
+    <p class="small muted" style="text-align:center">Opens in YouTube. A future App Store version could play videos right inside the app.</p>`;
+}
+
+/* ---------- Actions ---------- */
+function setFreq(f){state.freq=f;render()}
+function setAmt(a){state.amount=a;state.custom="";render()}
+function setCustom(v){
+  state.custom=v.replace(/[^0-9]/g,"");
+  const amt = state.custom?Number(state.custom):state.amount, imp=IMPACT[amt];
+  document.querySelectorAll(".amounts button").forEach(b=>b.classList.remove("on"));
+  if(state.custom) document.querySelector(".amounts button:last-child").classList.add("on");
+  $("impactBox").innerHTML = imp?`<div class="impact"><span style="font-size:22px">✨</span><div class="small"><b>${money(amt)}${state.freq==="monthly"?"/month":""}</b> ${imp}</div></div>`:"";
+  const b=$("giveBtn"); b.disabled=!(amt>0); b.textContent=`Give ${amt>0?money(amt):""}${state.freq==="monthly"?" monthly":""}`;
+}
+function openStory(id){state.tab="stories";state.story=id;history.replaceState(null,"","#stories");render();$("view").scrollTop=0}
+function toggleRsvp(id){
+  const i=state.rsvps.indexOf(id);
+  if(i>-1){state.rsvps.splice(i,1);toast("RSVP removed")}else{state.rsvps.push(id);toast("You're on the list!")}
+  store.set("rsvps",state.rsvps);render();
+}
+function addCart(id,d){
+  state.cart[id]=(state.cart[id]||0)+d; if(state.cart[id]<=0) delete state.cart[id];
+  saveCart(); if(d>0) toast("Added to cart"); render();
+  if($("sheetWrap").classList.contains("open")) openCart();
+}
+
+/* ---------- Sheets ---------- */
+function openSheet(html){$("sheet").innerHTML='<div class="grab"></div>'+html;$("sheetWrap").classList.add("open")}
+function closeSheet(){$("sheetWrap").classList.remove("open")}
+
+function openCheckout(){
+  const amt = state.custom?Number(state.custom):state.amount;
+  openSheet(`<h2 style="margin-top:0">Confirm your gift</h2>
+    <div class="card"><div class="row between"><span class="muted">Amount</span><b>${money(amt)}${state.freq==="monthly"?" / month":""}</b></div>
+    <div class="divider"></div><div class="row between"><span class="muted">Designation</span><b>${state.fund}</b></div></div>
+    <form onsubmit="event.preventDefault();giftDone(${amt})" style="margin-top:16px">
+      <div class="field"><label for="gname">Name</label><input id="gname" required placeholder="Your name"></div>
+      <div class="field"><label for="gemail">Email for receipt</label><input id="gemail" type="email" required placeholder="you@example.com"></div>
+      <div class="note" style="margin-bottom:14px">In the real app, Apple Pay or a payment provider would go here. This prototype doesn't collect payment details.</div>
+      <button class="btn" type="submit">Complete gift (demo)</button>
+    </form>`);
+}
+function giftDone(amt){
+  openSheet(`<div style="text-align:center"><div class="check">${svg('<path d="M5 12l5 5 9-10"/>',36,3)}</div>
+    <h2 style="margin:8px 0">Thank you!</h2>
+    <p class="muted">Your ${state.freq==="monthly"?"monthly ":""}gift of <b>${money(amt)}</b> to <b>${state.fund}</b> was recorded in this demo. No money was charged.</p>
+    <button class="btn" onclick="closeSheet();go('home')">Back to home</button></div>`);
+}
+function openVolunteer(){
+  openSheet(`<h2 style="margin-top:0">Volunteer interest</h2>
+    <form onsubmit="event.preventDefault();volDone()">
+      <div class="field"><label for="vname">Name</label><input id="vname" required></div>
+      <div class="field"><label for="vemail">Email</label><input id="vemail" type="email" required></div>
+      <div class="field"><label for="varea">I'd like to help with</label>
+        <select id="varea"><option>Events</option><option>Mentoring (requires screening)</option><option>Skills-based volunteering</option><option>Holiday drives</option></select></div>
+      <div class="field"><label for="vnote">Anything else? (optional)</label><textarea id="vnote" rows="3"></textarea></div>
+      <button class="btn" type="submit">Submit (demo)</button>
+    </form>`);
+}
+
+function doneSheet(title,msg){openSheet(`<div style="text-align:center"><div class="check">${svg('<path d="M5 12l5 5 9-10"/>',36,3)}</div><h2>${title}</h2><p class="muted">${msg}</p><button class="btn" onclick="closeSheet()">Done</button></div>`)}
+function volDone(){doneSheet("Thanks for raising your hand!","In the real app, our volunteer team would follow up. Nothing was sent from this demo.")}
+function orderDone(){state.cart={};saveCart();render();doneSheet("Order placed (demo)","No payment was taken. A real app would link to the online store.")}
+function openCart(){
+  const items = Object.entries(state.cart);
+  if(!items.length){openSheet(`<h2 style="margin-top:0">Your cart</h2><p class="muted">Your cart is empty.</p><button class="btn" onclick="closeSheet();go('shop')">Browse the shop</button>`);return}
+  openSheet(`<h2 style="margin-top:0">Your cart</h2><div class="list">
+    ${items.map(([id,q])=>{const p=PRODUCTS.find(x=>x.id===id);return `<div class="product"><div class="pimg" style="background:${p.bg};width:52px;min-width:52px;height:52px;font-size:22px">${p.emoji}</div>
+      <div style="flex:1"><div style="font-weight:700">${p.name}</div><div class="small muted">${money(p.price)}</div></div>
+      <div class="stepper"><button onclick="addCart('${id}',-1)">−</button><b>${q}</b><button onclick="addCart('${id}',1)">+</button></div></div>`}).join("")}
+    </div><div class="divider"></div>
+    <div class="row between" style="margin-bottom:16px"><b>Total</b><b>${money(cartTotal())}</b></div>
+    <button class="btn" onclick="orderDone()">Checkout (demo)</button>`);
+}
+
+/* ---------- Render ---------- */
+const SCREENS = {home:Home, give:Give, stories:Stories, events:Events, shop:Shop, thought:Thought};
+function render(){ $("view").innerHTML = SCREENS[state.tab](); renderTabs(); }
+(function init(){
+  const h = location.hash.slice(1); if(SCREENS[h]) state.tab=h;
+  saveCart(); render();
+})();
+</script>
+</body>
+</html>
