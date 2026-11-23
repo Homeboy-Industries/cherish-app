@@ -305,10 +305,16 @@ function Shop(){
 }
 
 const TOTD_PLAYLIST = "https://www.youtube.com/watch?v=5OuAIed3M6U&list=PLhJsI4TowOGT861CXWCHywMQ0Vh3QMA7q";
+const TOTD_EMBED = "https://www.youtube-nocookie.com/embed/5OuAIed3M6U?list=PLhJsI4TowOGT861CXWCHywMQ0Vh3QMA7q&playsinline=1&rel=0";
+// Claude-hosted previews block embedded players, so only embed where it works (GitHub Pages, local testing).
+const CAN_EMBED = /github\.io$/.test(location.hostname) || ["localhost","127.0.0.1"].includes(location.hostname);
 function Thought(){
   return `<button class="back" onclick="go('home')">${svg(I.back,18,2.5)} Home</button>
     <h1>Thought of the Day</h1>
     <p class="muted" style="margin:0 0 16px">A few minutes of reflection to carry with you today.</p>
+    ${CAN_EMBED ? `<div style="border-radius:var(--radius);overflow:hidden;aspect-ratio:16/9;background:#000">
+        <iframe src="${TOTD_EMBED}" title="Thought of the Day playlist" style="width:100%;height:100%;border:0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>` : `
     <a href="${TOTD_PLAYLIST}" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:#fff">
       <div style="border-radius:var(--radius);aspect-ratio:16/9;background:linear-gradient(140deg,var(--sage) 0%,#2F5241 100%);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:18px">
         <div style="position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.1)"></div>
@@ -317,10 +323,10 @@ function Thought(){
             <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
         <div style="position:relative;font-family:'DM Serif Display',serif;font-size:22px">Today's thought</div>
         <div class="small" style="position:relative;opacity:.9">Watch on YouTube</div>
-      </div></a>
+      </div></a>`}
     <div style="height:14px"></div>
-    <a class="btn" href="${TOTD_PLAYLIST}" target="_blank" rel="noopener" style="text-decoration:none">Open the full playlist</a>
-    <p class="small muted" style="text-align:center">Opens in YouTube. A future App Store version could play videos right inside the app.</p>`;
+    <a class="btn ${CAN_EMBED?"secondary":""}" href="${TOTD_PLAYLIST}" target="_blank" rel="noopener" style="text-decoration:none">${CAN_EMBED?"Open in YouTube":"Open the full playlist"}</a>
+    ${CAN_EMBED?"":`<p class="small muted" style="text-align:center">Opens in YouTube. On the GitHub Pages version, videos play right here.</p>`}`;
 }
 
 /* ---------- Actions ---------- */
